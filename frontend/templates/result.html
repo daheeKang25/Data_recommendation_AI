@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 추천 결과 | AI 공공데이터 추천 서비스</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
+</head>
+<body>
+
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="nav-container">
+            <h1 class="logo">Data Recommendation AI</h1>
+
+            <nav class="nav-menu">
+                <a href="/">서비스 소개</a>
+                <a href="/input">입력 화면</a>
+                <a href="/explore">데이터 탐색</a>
+                <a href="/result">AI 추천 결과</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 페이지 제목 영역 -->
+    <section class="page-hero">
+        <h2>AI 추천 결과</h2>
+        <p>
+            공공데이터포털에서 조회된 후보 목록을 기준으로
+            AI가 추천 데이터와 활용 방향을 제안합니다.
+            공공데이터를 어떻게 활용해볼까요?
+        </p>
+    </section>
+
+    <!-- 추천 결과 본문 -->
+    <main class="content-container">
+
+        <!-- 결과 요약 영역 -->
+        <section class="result-card result-summary">
+            <div class="summary-header">
+                <div>
+                    <h3>추천 결과 요약</h3>
+                    <p>
+                        사용자 입력과 공공데이터 후보 목록을 바탕으로 생성된 추천 결과입니다.
+                    </p>
+                </div>
+                <span class="status-badge">추천 완료</span>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <strong>활용 주제</strong>
+                    <p id="resultTopic">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>활용 목적</strong>
+                    <p id="resultPurpose">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>관심 지역</strong>
+                    <p id="resultRegion">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>추천 데이터 수</strong>
+                    <p id="recommendationCount">0개</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 안내 박스 -->
+        <section class="notice-box result-notice">
+            <p>
+                이 추천 결과는 AI가 임의로 생성한 데이터가 아니라,
+                데이터 탐색 화면에서 조회된 공공데이터 후보 목록을 기준으로 생성됩니다.
+                하지만, 실제 분석에 사용하기 전에는 공공데이터포털 원본 페이지에서 데이터 설명, 갱신일, 제공형태를 다시 확인하는 것을 권장합니다.
+            </p>
+        </section>
+
+        <!-- 오류 메시지 -->
+        <div id="errorMessage" class="message-box error-message" style="display: none;"></div>
+
+        <!-- 로딩 메시지 -->
+        <div id="loadingMessage" class="message-box loading-message" style="display: none;">
+            AI 추천 결과를 불러오는 중입니다.
+        </div>
+
+        <!-- 추천 결과 없음 메시지 -->
+        <section id="emptyMessage" class="empty-box" style="display: none;">
+            <h4>추천 결과가 없습니다.</h4>
+            <p>
+                데이터 탐색 화면에서 후보 데이터를 먼저 확인한 뒤 추천 결과를 생성하세요.
+            </p>
+            <a href="/explore" class="primary-button">데이터 탐색 화면으로 이동</a>
+        </section>
+
+        <!-- 추천 카드 목록 -->
+        <section class="recommendation-section">
+            <div class="section-title result-section-title">
+                <h3>추천 데이터 목록</h3>
+                <p>
+                    추천 순위, 추천 이유, 활용 방향, 분석 아이디어를 확인할 수 있습니다.
+                </p>
+            </div>
+
+            <div id="recommendationList" class="recommendation-list">
+                <!-- result.js에서 추천 카드가 동적으로 생성됩니다. -->
+            </div>
+        </section>
+
+        <!-- 활용 가이드 영역 -->
+        <section class="table-card result-guide">
+            <h3>결과 활용 방법</h3>
+
+            <div class="feature-list result-guide-list">
+                <div class="feature-item">
+                    <span class="step-number">01</span>
+                    <div>
+                        <h4>원본 데이터 확인</h4>
+                        <p>
+                            추천 카드의 공공데이터포털 바로가기 버튼을 눌러
+                            데이터 설명, 제공형태, 수정일을 확인해보세요.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">02</span>
+                    <div>
+                        <h4>분석 가능 컬럼 확인</h4>
+                        <p>
+                            실제 파일 또는 API 명세를 확인하여 지역, 날짜, 수치형 지표 등
+                            분석에 필요한 컬럼이 있는지 검토해보세요.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">03</span>
+                    <div>
+                        <h4>결합 데이터 선정</h4>
+                        <p>
+                            추천 결과의 결합 가능 데이터 키워드를 참고하여
+                            추가 데이터를 함께 탐색해보세요.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">04</span>
+                    <div>
+                        <h4>시각화 방향 구체화</h4>
+                        <p>
+                            지도, 막대그래프, 산점도, 순위표 등 추천된 시각화 방식을
+                            분석 목적에 맞게 구체화해보세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 버튼 영역 -->
+        <section class="form-actions result-actions">
+            <a href="/explore" class="back-button">데이터 탐색으로 돌아가기</a>
+            <a href="/input" class="primary-button">새로운 주제로 다시 찾기</a>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+        <p>한양여자대학교 멀티AI플랫폼 활용 공모전 - 제작부문 출품작</p>
+        <a href="https://icons8.kr/license">Icons by icons8.</a>
+        <p>
+            Copyright 2026. 강다희. All rights reserved.<br>
+            사용된 AI모델인 ChatGPT는 실수를 할 수 있습니다. 중요한 정보는 재차 확인하세요
+        </p>
+    </footer>
+
+    <!-- JS 연결 -->
+    <script src="{{ url_for('static', filename='js/result.js') }}"></script>
+
+</body>
+</html>

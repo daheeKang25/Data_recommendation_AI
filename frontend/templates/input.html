@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>입력 화면 | AI 공공데이터 추천 서비스</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
+</head>
+<body>
+
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="nav-container">
+            <h1 class="logo">Data Recommendation AI</h1>
+
+            <nav class="nav-menu">
+                <a href="/">서비스 소개</a>
+                <a href="/input">입력 화면</a>
+                <a href="/explore">데이터 탐색</a>
+                <a href="/result">AI 추천 결과</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 페이지 제목 영역 -->
+    <section class="page-hero">
+        <h2>데이터 활용 목적 입력</h2>
+        <p>
+            분석하고 싶은 주제와 목적을 입력하면 AI가 주요 키워드를 추출하고,
+            공공데이터포털에서 실제 데이터 후보를 탐색합니다.
+            어떤 공공데이터를 찾아볼까요?
+        </p>
+    </section>
+
+    <!-- 입력 폼 영역 -->
+    <main class="content-container">
+
+        <section class="form-card">
+            <form id="inputForm">
+
+                <!-- 활용 주제 -->
+                <div class="form-group">
+                    <label for="topic">활용 주제</label>
+                    <input 
+                        type="text" 
+                        id="topic" 
+                        name="topic"
+                        placeholder="예: 서울시 따릉이 이용 현황 분석"
+                        required
+                    >
+                </div>
+
+                <!-- 활용 목적 -->
+                <div class="form-group">
+                    <label for="purpose">활용 목적</label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="">활용 목적을 선택하세요</option>
+                        <option value="공모전">공모전</option>
+                        <option value="전공 과제">전공 과제</option>
+                        <option value="보고서 작성">보고서 작성</option>
+                        <option value="데이터 시각화">데이터 시각화</option>
+                        <option value="창업 아이디어 기획">창업 아이디어 기획</option>
+                        <option value="정책 문제 분석">정책 문제 분석</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <!-- 활용 내용 -->
+                <div class="form-group">
+                    <label for="content">활용 내용</label>
+                    <textarea 
+                        id="content" 
+                        name="content"
+                        placeholder="예: 서울시내 자치구별 따릉이 이용 현황을 분석하고 싶습니다."
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- 관심 지역 -->
+                <div class="form-group">
+                    <label for="region">관심 지역</label>
+                    <input 
+                        type="text" 
+                        id="region" 
+                        name="region"
+                        placeholder="예: 서울시, 경기도, 부산광역시"
+                    >
+                </div>
+
+                <!-- 원하는 데이터 형태 -->
+                <div class="form-group">
+                    <label>원하는 데이터 형태</label>
+
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="dataTypes" value="CSV">
+                            <span>CSV</span>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="dataTypes" value="XLSX">
+                            <span>Excel</span>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="dataTypes" value="Open API">
+                            <span>Open API</span>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="dataTypes" value="JSON">
+                            <span>JSON</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 안내 문구 -->
+                <div class="notice-box">
+                    <p>
+                        입력한 내용은 AI 키워드 추출과 공공데이터 후보 탐색에만 사용됩니다.
+                        추천 결과는 공공데이터포털에서 조회된 후보 목록을 기준으로 생성됩니다.
+                    </p>
+                </div>
+
+                <!-- 오류 메시지 -->
+                <div id="errorMessage" class="message-box error-message" style="display: none;"></div>
+
+                <!-- 로딩 메시지 -->
+                <div id="loadingMessage" class="message-box loading-message" style="display: none;">
+                    AI가 키워드를 추출하고 공공데이터 후보를 탐색하는 중입니다.
+                </div>
+
+                <!-- 버튼 영역 -->
+                <div class="form-actions">
+                    <a href="/" class="back-button">이전으로</a>
+                    <button type="submit" class="primary-button" id="submitButton">
+                        데이터 후보 탐색하기
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- 예시 입력 영역 -->
+        <section class="example-section">
+            <h3>입력 예시를 참고해보세요!</h3>
+
+            <div class="example-card">
+                <p><strong>활용 주제</strong></p>
+                <p>서울시 따릉이 이용현황 분석</p>
+
+                <p><strong>활용 목적</strong></p>
+                <p>데이터 시각화</p>
+
+                <p><strong>활용 내용</strong></p>
+                <p>
+                    서울시 자치구별 따릉이 이용현황을 분석하고, 가장 이용이 잦은 자치구 순서대로 시각화하고 싶습니다.
+                </p>
+
+                <p><strong>관심 지역</strong></p>
+                <p>서울시</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+        <p>한양여자대학교 멀티AI플랫폼 활용 공모전 - 제작부문 출품작</p>
+        <a href="https://icons8.kr/license">Icons by icons8.</a>
+        <p>
+            Copyright 2026. 강다희. All rights reserved.<br>
+            사용된 AI모델인 ChatGPT는 실수를 할 수 있습니다. 중요한 정보는 재차 확인하세요
+        </p>
+    </footer>
+
+    <!-- JS 연결 -->
+    <script src="{{ url_for('static', filename='js/input.js') }}"></script>
+
+</body>
+</html>

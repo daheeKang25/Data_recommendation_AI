@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 공공데이터 추천 서비스</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
+</head>
+<body>
+
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="nav-container">
+            <h1 class="logo">Data Recommendation AI</h1>
+
+            <nav class="nav-menu">
+                <a href="/">서비스 소개</a>
+                <a href="/input">입력 화면</a>
+                <a href="/explore">데이터 탐색</a>
+                <a href="/result">AI 추천 결과</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 소개 영역 -->
+    <main class="main">
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <p class="badge">멀티AI플랫폼 활용 공모전 - 제작부문 출품작</p>
+
+                <h2>
+                    AI 활용 공공데이터 추천 및<br>
+                    콘텐츠 기획 서비스
+                </h2>
+
+                <p class="hero-description">
+                    사용자가 분석하고 싶은 주제와 목적을 입력하면,
+                    AI가 핵심 키워드를 추출하고 공공데이터포털에서 조회 가능한
+                    데이터 후보를 탐색한 뒤 활용 가능성이 높은 데이터를 추천합니다.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="/input" class="primary-button">서비스 시작하기</a>
+                    <a href="#service-flow" class="secondary-button">사용 방법 보기</a>
+                </div>
+        </section>
+
+        <!-- 문제 상황 -->
+        <section class="section">
+            <div class="section-title">
+                <h3>왜 필요한 서비스인가?</h3>
+                <p>
+                    공공데이터포털에는 많은 데이터가 존재하지만,
+                    사용자가 자신의 주제에 적합한 데이터를 직접 찾고 판단하는 과정은 어렵습니다.
+                </p>
+            </div>
+
+            <div class="card-grid">
+                <div class="info-card">
+                    <h4>데이터 선택의 어려움</h4>
+                    <p>
+                        공공데이터의 양이 많아 어떤 데이터를 사용해야 하는지 판단하기 어렵습니다.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <h4>활용 방향 구체화의 어려움</h4>
+                    <p>
+                        데이터를 찾더라도 분석, 시각화, 콘텐츠 제작에 어떻게 활용할지 정리하기 어렵습니다.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <h4>AI 추천의 신뢰성 문제</h4>
+                    <p>
+                        일반적인 AI 답변은 실제 존재하지 않는 데이터를 추천할 가능성이 있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 서비스 해결 방식 -->
+        <section class="section light-section">
+            <div class="section-title">
+                <h3>서비스 해결 방식</h3>
+                <p>
+                    이 서비스는 AI 추천과 실제 공공데이터포털 API 조회를 결합하여
+                    데이터 탐색의 신뢰도를 높였습니다.
+                </p>
+            </div>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="step-number">01</span>
+                    <div>
+                        <h4>사용자 입력 분석</h4>
+                        <p>활용 주제, 목적, 내용을 바탕으로 AI가 주요 키워드를 추출합니다.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">02</span>
+                    <div>
+                        <h4>공공데이터 후보 탐색</h4>
+                        <p>추출된 키워드를 공공데이터포털 목록조회 API에 전달하여 실제 데이터 후보를 조회합니다.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">03</span>
+                    <div>
+                        <h4>AI 후보 데이터 추천</h4>
+                        <p>조회된 데이터 목록 안에서만 AI가 적합한 데이터를 평가하고 추천합니다.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="step-number">04</span>
+                    <div>
+                        <h4>분석 아이디어 제공</h4>
+                        <p>추천 데이터의 활용 방향, 분석 아이디어, 시각화 방향을 함께 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사용 흐름 -->
+        <section class="section" id="service-flow">
+            <div class="section-title">
+                <h3>사용 방법</h3>
+                <p>총 4단계 화면으로 구성되어있습니다.</p>
+            </div>
+
+            <div class="flow-container">
+                <div class="flow-card">
+                    <span>1</span>
+                    <h4>서비스 소개</h4>
+                    <p>서비스 목적과 사용 방식을 소개합니다.</p>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-card">
+                    <span>2</span>
+                    <h4>입력 화면</h4>
+                    <p>분석 주제, 목적, 활용 내용을 입력합니다.</p>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-card">
+                    <span>3</span>
+                    <h4>데이터 탐색</h4>
+                    <p>공공데이터포털에서 조회된 후보 데이터를 확인합니다.</p>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-card">
+                    <span>4</span>
+                    <h4>AI 추천 결과</h4>
+                    <p>추천 데이터와 활용 방향을 확인합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 차별점 -->
+        <section class="section light-section">
+            <div class="section-title">
+                <h3>차별점</h3>
+            </div>
+
+            <div class="highlight-box">
+                <h4>실제 조회된 공공데이터 안에서만 추천합니다.</h4>
+                <p>
+                    이 서비스에 사용된 AI는 공공데이터포털 API로 먼저 조회된 후보 목록을 기준으로 추천을 수행합니다.
+                    이를 통해 존재하지 않는 데이터를 추천하는 문제를 줄일 수 있습니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 시작 CTA -->
+        <section class="cta-section">
+            <h3>어떤 공공데이터를 찾고싶으신가요?</h3>
+            <p>분석하고 싶은 주제와 목적을 입력하면 데이터 후보 탐색을 시작합니다.</p>
+            <a href="/input" class="primary-button">입력 화면으로 이동</a>
+        </section>
+
+    </main>
+    </div>
+
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+        <p>한양여자대학교 멀티AI플랫폼 활용 공모전 - 제작부문 출품작</p>
+        <a href="https://icons8.kr/license">Icons by icons8.</a>
+        <p>
+            Copyright 2026. 강다희. All rights reserved.<br>
+            사용된 AI모델인 ChatGPT는 실수를 할 수 있습니다. 중요한 정보는 재차 확인하세요
+        </p>
+    </footer>
+
+</body>
+</html>
