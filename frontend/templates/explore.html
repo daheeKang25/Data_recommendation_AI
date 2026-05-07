@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 탐색 | AI 공공데이터 추천 서비스</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
+</head>
+<body>
+
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="nav-container">
+            <h1 class="logo">Data Recommendation AI</h1>
+
+            <nav class="nav-menu">
+                <a href="/">서비스 소개</a>
+                <a href="/input">입력 화면</a>
+                <a href="/explore">데이터 탐색</a>
+                <a href="/result">AI 추천 결과</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 페이지 제목 영역 -->
+    <section class="page-hero">
+        <h2>공공데이터 후보 탐색</h2>
+        <p>
+            AI가 추출한 키워드를 바탕으로 공공데이터포털에서 조회된 데이터 후보를 확인합니다.
+            이 후보 목록을 기준으로 AI 추천 결과가 생성됩니다.
+            어떤 공공데이터가 조회되었는지 확인해볼까요?
+        </p>
+    </section>
+
+    <!-- 데이터 탐색 본문 -->
+    <main class="content-container">
+
+        <!-- 입력 요약 및 키워드 영역 -->
+        <section class="result-card explore-summary">
+            <div class="summary-header">
+                <div>
+                    <h3>입력 내용 요약</h3>
+                    <p>사용자가 입력한 분석 목적과 AI가 추출한 주요 키워드입니다.</p>
+                </div>
+                <span class="status-badge">탐색 단계</span>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <strong>활용 주제</strong>
+                    <p id="summaryTopic">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>활용 목적</strong>
+                    <p id="summaryPurpose">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>관심 지역</strong>
+                    <p id="summaryRegion">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <strong>조회된 후보 수</strong>
+                    <p id="candidateCount">0개</p>
+                </div>
+            </div>
+
+            <div class="keyword-area">
+                <h4>AI 추출 키워드</h4>
+                <div id="keywordList" class="keyword-list">
+                    <span class="keyword-chip">키워드 없음</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 안내 박스 -->
+        <section class="notice-box explore-notice">
+            <p>
+                아래 목록은 공공데이터포털 API를 통해 조회된 데이터 후보입니다.
+                AI 추천은 이 목록 안에서만 생성됩니다.
+            </p>
+        </section>
+
+        <!-- 필터 및 검색 영역 -->
+        <section class="table-card">
+            <div class="table-header">
+                <div>
+                    <h3>조회된 공공데이터 후보</h3>
+                    <p>데이터명, 제공기관, 제공형태, 수정일을 기준으로 후보 데이터를 확인하세요.</p>
+                </div>
+
+                <div class="table-actions">
+                    <button type="button" class="back-button" id="refreshButton">
+                        새로고침
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-area">
+                <div class="filter-group">
+                    <label for="searchInput">검색어</label>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="데이터명, 제공기관, 설명 검색"
+                    >
+                </div>
+
+                <div class="filter-group">
+                    <label for="typeFilter">제공형태</label>
+                    <select id="typeFilter">
+                        <option value="">전체</option>
+                        <option value="CSV">CSV</option>
+                        <option value="XLSX">Excel</option>
+                        <option value="Open API">Open API</option>
+                        <option value="JSON">JSON</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortSelect">정렬</label>
+                    <select id="sortSelect">
+                        <option value="default">기본순</option>
+                        <option value="title">데이터명순</option>
+                        <option value="organization">제공기관순</option>
+                        <option value="updated">수정일순</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 오류 메시지 -->
+            <div id="errorMessage" class="message-box error-message" style="display: none;"></div>
+
+            <!-- 로딩 메시지 -->
+            <div id="loadingMessage" class="message-box loading-message" style="display: none;">
+                공공데이터 후보 목록을 불러오는 중입니다.
+            </div>
+
+            <!-- 데이터 없음 메시지 -->
+            <div id="emptyMessage" class="empty-box" style="display: none;">
+                <h4>조회된 데이터 후보가 없습니다.</h4>
+                <p>입력 화면으로 돌아가 검색 주제나 키워드를 더 구체적으로 입력해보세요.</p>
+                <a href="/input" class="primary-button">입력 화면으로 돌아가기</a>
+            </div>
+
+            <!-- 데이터 테이블 -->
+            <div class="table-scroll">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>데이터명</th>
+                            <th>제공기관</th>
+                            <th>제공형태</th>
+                            <th>수정일</th>
+                            <th>설명</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="datasetTableBody">
+                        <!-- explore.js에서 동적으로 데이터 행 생성 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 다음 단계 버튼 영역 -->
+        <section class="form-actions explore-actions">
+            <a href="/input" class="back-button">입력 화면으로 돌아가기</a>
+
+            <button type="button" class="primary-button" id="recommendButton">
+                AI 추천 결과 생성하기
+            </button>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+        <p>한양여자대학교 멀티AI플랫폼 활용 공모전 - 제작부문 출품작</p>
+        <a href="https://icons8.kr/license">Icons by icons8.</a>
+        <p>
+            Copyright 2026. 강다희. All rights reserved.<br>
+            사용된 AI모델인 ChatGPT는 실수를 할 수 있습니다. 중요한 정보는 재차 확인하세요
+        </p>
+    </footer>
+
+    <!-- JS 연결 -->
+    <script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+
+</body>
+</html>
